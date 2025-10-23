@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth; // <-- Linha adicionada aqui
+use App\Http\Controllers\ItemEstoqueController; // Verifique se esta linha já existe
+use App\Http\Controllers\HomeController; // Adicione esta linha também, se não existir
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +20,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(); // Esta linha agora deve funcionar corretamente
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('estoque', ItemEstoqueController::class)->except(['show']);
+
+Route::get('/home', [HomeController::class, 'index'])->name('home'); // Também é bom usar ::class aqui
