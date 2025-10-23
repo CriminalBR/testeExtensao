@@ -1,60 +1,51 @@
-@extends('layouts.app') {{-- Usa o layout padrão com menu, etc --}}
+{{-- ... Código anterior ... --}}
+                        @else
+                            {{-- Link para Estoque --}}
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('estoque.*') ? 'active' : '' }}" href="{{ route('estoque.index') }}">
+                                    <i class="bi bi-box-seam me-1"></i> {{ __('Estoque') }}
+                                </a>
+                            </li>
+                            {{-- Link para Relatório --}}
+                             <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('relatorio.*') ? 'active' : '' }}" href="{{ route('relatorio.index') }}">
+                                    <i class="bi bi-bar-chart-line me-1"></i> {{ __('Relatório') }}
+                                </a>
+                            </li>
 
-@section('content')
-<div class="container">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h1>Meu Estoque</h1>
-        </div>
-        <div class="col-md-6 text-end">
-            <a href="{{ route('estoque.create') }}" class="btn btn-primary">Adicionar Novo Item</a>
-        </div>
-    </div>
+                            {{-- Dropdown do Usuário (já existente) --}}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                     <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+                                </a>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    {{-- Pode adicionar link para Perfil aqui se quiser --}}
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        <i class="bi bi-box-arrow-right me-2"></i> {{ __('Logout') }}
+                                    </a>
 
-    <div class="card">
-        <div class="card-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Quantidade</th>
-                        <th>Descrição</th>
-                        <th>Adicionado em</th>
-                        <th>Ações</th> {{-- Coluna para botões --}}
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($itens as $item) {{-- Loop nos itens passados pelo Controller --}}
-                        <tr>
-                            <td>{{ $item->nome }}</td>
-                            <td>{{ $item->quantidade }}</td>
-                            <td>{{ $item->descricao ?? '-' }}</td>
-                            <td>{{ $item->created_at->format('d/m/Y H:i') }}</td> {{-- Data formatada --}}
-                            <td>
-                                {{-- Adicione botões de Editar e Excluir aqui quando implementar as rotas/métodos --}}
-                                {{-- <a href="{{ route('estoque.edit', $item->id) }}" class="btn btn-sm btn-warning">Editar</a> --}}
-                                {{-- <form action="{{ route('estoque.destroy', $item->id) }}" method="POST" style="display:inline;"> --}}
-                                    {{-- @csrf --}}
-                                    {{-- @method('DELETE') --}}
-                                    {{-- <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</button> --}}
-                                {{-- </form> --}}
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Nenhum item cadastrado no estoque ainda.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-@endsection
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {{-- ... Restante do código ... --}}
+
+    {{-- Certifique-se de ter os scripts do Bootstrap (geralmente no final do body) --}}
+    {{-- @vite(['resources/js/app.js']) --}} {{-- Se estiver usando Vite --}}
+    {{-- Ou adicione o script do Bootstrap via CDN se não usar Vite/Mix --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> --}}
+
+    {{-- Adicionar CDN Bootstrap Icons (idealmente no <head>) --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</body>
+</html>

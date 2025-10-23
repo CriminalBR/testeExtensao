@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">{{ __('Adicionar Novo Item ao Estoque') }}</div>
+                <div class="card-header bg-warning text-dark">{{ __('Editar Item do Estoque') }}</div>
 
                 <div class="card-body">
                     {{-- Exibe erros de validação --}}
@@ -19,13 +19,15 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('estoque.store') }}">
+                    <form method="POST" action="{{ route('estoque.update', $item->id) }}">
                         @csrf
+                        @method('PUT') {{-- Método HTTP para atualização --}}
 
                         <div class="row mb-3">
                             <label for="nome" class="col-md-4 col-form-label text-md-end">{{ __('Nome do Item') }} <span class="text-danger">*</span></label>
                             <div class="col-md-6">
-                                <input id="nome" type="text" class="form-control @error('nome') is-invalid @enderror" name="nome" value="{{ old('nome') }}" required autocomplete="nome" autofocus>
+                                {{-- Usa o valor antigo (old) ou o valor atual do item --}}
+                                <input id="nome" type="text" class="form-control @error('nome') is-invalid @enderror" name="nome" value="{{ old('nome', $item->nome) }}" required autocomplete="nome" autofocus>
                                 @error('nome')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -37,7 +39,7 @@
                         <div class="row mb-3">
                             <label for="quantidade" class="col-md-4 col-form-label text-md-end">{{ __('Quantidade') }} <span class="text-danger">*</span></label>
                             <div class="col-md-6">
-                                <input id="quantidade" type="number" class="form-control @error('quantidade') is-invalid @enderror" name="quantidade" value="{{ old('quantidade', 0) }}" required min="0">
+                                <input id="quantidade" type="number" class="form-control @error('quantidade') is-invalid @enderror" name="quantidade" value="{{ old('quantidade', $item->quantidade) }}" required min="0">
                                 @error('quantidade')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -49,7 +51,7 @@
                         <div class="row mb-3">
                             <label for="descricao" class="col-md-4 col-form-label text-md-end">{{ __('Descrição (Opcional)') }}</label>
                             <div class="col-md-6">
-                                <textarea id="descricao" class="form-control @error('descricao') is-invalid @enderror" name="descricao" rows="3">{{ old('descricao') }}</textarea>
+                                <textarea id="descricao" class="form-control @error('descricao') is-invalid @enderror" name="descricao" rows="3">{{ old('descricao', $item->descricao) }}</textarea>
                                 @error('descricao')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -60,11 +62,11 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-plus-circle"></i> {{ __('Adicionar Item') }}
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> {{ __('Salvar Alterações') }}
                                 </button>
                                 <a href="{{ route('estoque.index') }}" class="btn btn-secondary">
-                                    <i class="bi bi-x-circle"></i> {{ __('Cancelar') }}
+                                     <i class="bi bi-x-circle"></i> {{ __('Cancelar') }}
                                 </a>
                             </div>
                         </div>
@@ -75,7 +77,3 @@
     </div>
 </div>
 @endsection
-
-{{-- Adicione a CDN do Bootstrap Icons no seu layout principal (app.blade.php) ou instale via npm se preferir --}}
-{{-- Exemplo CDN no <head> de layouts/app.blade.php: --}}
-{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"> --}}
